@@ -1,0 +1,34 @@
+---
+amsthm:
+  counter_depth: 1
+  parent_counter: section
+  plain:
+  - theorem
+  - lemma
+  - corollary
+  - proposition
+  - conjecture
+  - criterion
+  - assertion
+  definition:
+  - definition
+  - condition
+  - problem
+  - example
+  - exercise
+  - alogrithm
+  - question
+  - axiom
+  - property
+  - assumption
+  - hypothesis
+  remark:
+  - remark
+  - note
+  - notation
+  - claim
+  - summary
+  - acknowledgement
+  - case
+  - conclusion
+...
