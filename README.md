@@ -4,7 +4,7 @@ A pandoc filter for converting LaTeX to html for mathematics teaching. Provides 
 Installation
 ------------
 
-    pip install git+https://github.com/GavinMcWhinnie/pandoc-math --user
+    pip install git+https://github.com/GavinMcWhinnie/pandoc-math
 
 Usage
 -----
@@ -14,4 +14,4 @@ The basic usage is:
 
 Using custom metadata file to define custom amsthm shared/parent counters:
 
-    pandoc input.tex -o output.html -s --mathjax --metadata-file meta.yaml --filter pandoc-math
+    pandoc input.tex -o output.html -s --mathjax --metadata-file metadata.yaml --filter pandoc-math
