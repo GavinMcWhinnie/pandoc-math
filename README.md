@@ -12,7 +12,7 @@ To download pandoc-math, use the pip tool with the command:
 
 Usage
 -----
-To convert `input.tex` to `output.html` use the pandoc `--filter` argument. For example:
+To convert `input.tex` to `output.html` using the pandoc-math filter, use the `--filter` argument. For example:
 
     pandoc input.tex -o output.html -s --mathjax --filter pandoc-math
 
