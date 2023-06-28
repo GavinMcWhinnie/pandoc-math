@@ -4,7 +4,7 @@ A pandoc filter for converting LaTeX to html for mathematics teaching. Provides 
 Installation
 ------------
 
-Requires Python > 3.7 which can be installed here: [python](https://www.python.org/downloads/) and Pandoc which can be installed here: [pandoc](https://pandoc.org/installing.html)
+Requires Python > 3.7 which can be installed here: [Python download page](https://www.python.org/downloads/) and Pandoc which can be installed here: [Pandoc installation page](https://pandoc.org/installing.html)
 
     pip install git+https://github.com/GavinMcWhinnie/pandoc-math
 
