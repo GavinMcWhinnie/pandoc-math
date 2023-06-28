@@ -4,13 +4,15 @@ A pandoc filter for converting LaTeX to html for mathematics teaching. Provides 
 Installation
 ------------
 
-Requires Python > 3.7 which can be installed here: [Python download page](https://www.python.org/downloads/) and Pandoc which can be installed here: [Pandoc installation page](https://pandoc.org/installing.html)
+Requires Python > 3.7 which can be installed here: [Python download page](https://www.python.org/downloads/) and Pandoc which can be installed here: [Pandoc installation page](https://pandoc.org/installing.html).
+
+To download pandoc-math, use the pip tool with the command:
 
     pip install git+https://github.com/GavinMcWhinnie/pandoc-math
 
 Usage
 -----
-The basic usage is:
+To convert `input.tex` to `output.html` use the pandoc `--filter` argument. For example:
 
     pandoc input.tex -o output.html -s --mathjax --filter pandoc-math
 
