@@ -12,4 +12,5 @@ Usage
     pandoc input.tex -o output.tex -s --mathjax --filter pandoc-math
 
 Using custom metadata file:
+
     pandoc input.tex -o output.tex -s --mathjax --metadata-file meta.yaml --filter pandoc-math
