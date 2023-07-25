@@ -1,0 +1,6 @@
+site_name: pandoc-math Documentation
+theme:
+  name: material
+  palette:
+    scheme: default
+    primary: teal
