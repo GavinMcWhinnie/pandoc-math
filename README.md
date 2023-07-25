@@ -10,6 +10,10 @@ To download pandoc-math, use the pip tool with the command:
 
     pip install git+https://github.com/GavinMcWhinnie/pandoc-math
 
+Documentation:
+-------------
+https://gavinmcwhinnie.github.io/pandoc-math
+
 Usage
 -----
 To convert `input.tex` to `output.html` using the pandoc-math filter, use the `--filter` argument. For example:
