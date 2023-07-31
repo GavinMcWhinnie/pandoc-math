@@ -72,7 +72,6 @@ LEVEL_TO_SECTION = {1: "section", 2: "subsection", 3: "subsubsection"}
 # Type Aliases
 THEOREM_DATA = dict[str,str]
 
-
 @dataclass
 class AmsTheorem:
     style: str
@@ -88,38 +87,50 @@ class AmsthmSettings:
     section_counters : list[int]
     theorem_counters : dict[str, int]
     identifiers : dict[str, str]
+    number_within: bool = False
+    equation_counter : int
 
     def __init__(self, doc: pf.Doc) -> None:
         self.theorems = {}
         self.section_counters = [0]*3
         self.theorem_counters = {}
         self.identifiers = {}
+        self.equation_counter = 1
         self.read_metadata(doc)
 
+        # Add the pre-defined proof environment to theorems
         proof : AmsTheorem = AmsTheorem("proof", "proof", "Proof", numbered=False)
         self.theorems['proof'] = proof
 
     def read_metadata(self, doc: pf.Doc) -> None:
+        """
+            Read amsthm_settings metadata to setup options on theorem styles and counters.
+        """
 
         metadata: dict[str, dict] = doc.get_metadata("amsthm_settings")
+
+        if (numberwithin := metadata.get('number_within')):
+            self.number_within = numberwithin
+            logger.info('Numbering within sections set to: '+str(numberwithin).upper())
 
         for style in AMSTHM_STYLES:
             theorems_list: list[THEOREM_DATA] = metadata.get(style)
             if theorems_list:
                 for theorem in theorems_list:
-
+                    # Get individual theorem data from metadata
                     env_name : str = theorem.get('env_name')
                     text : str = theorem.get('text')
                     parent_counter : str = theorem.get('parent_counter')
                     shared_counter : str = theorem.get('shared_counter')
                     numbered : bool = theorem.get('numbered')
 
+                    # NewTheorem environment has shared counter
                     if shared_counter is not None:
                         self.theorem_counters[shared_counter] = 0
                         if parent_counter is not None:
                             logger.warning("AmsTheorem %s has both a parent and shared counter.", env_name)
 
-
+                    # Create AmsTheorem dataclass and add to list of theorems
                     new_theorem : AmsTheorem = AmsTheorem(style, env_name, text, parent_counter, shared_counter, numbered)
                     self.theorems[env_name] = new_theorem
                     logger.info('Added new AmsTheorem: %s.', new_theorem.text)
@@ -127,41 +138,83 @@ class AmsthmSettings:
 
 
 def replace_qed_here(elem: pf.Element, doc: pf.Doc) -> None:
+    """
+        Helper function that replaces \qedhere in proof environment.
+    """
+
     qed_symbol : str = chr(9723)
+
     if isinstance(elem, pf.Math):
+        # Replace qedhere with equation tag containing '◻'
         if "\\qedhere" in elem.text:
             elem.text = elem.text.replace("\\qedhere","\\tag*{"+qed_symbol+"}")
+
     if isinstance(elem, pf.Str):
+        # Remove the original '◻' at the end of the proof
         if qed_symbol in elem.text:
             return []
 
 
 def amsthm_numbering(elem: pf.Element, doc: pf.Doc) -> None:
+    """
+        Action that re-numbers amsthm environments and numbers labelled equations.
+    """
 
     amsthm_settings: AmsthmSettings = doc._amsthm_settings
+
     if isinstance(elem, pf.Header):
-        level: int = elem.level
+        level : int = elem.level
+        section : str = LEVEL_TO_SECTION.get(level)
         if level <= MAX_SECTION_DEPTH:
+
 
             # Add one to counter and reset deeper counters
             amsthm_settings.section_counters[level - 1] += 1
             for i in range(elem.level, MAX_SECTION_DEPTH):
                 amsthm_settings.section_counters[i] = 0
 
-            #### NEED TO CHECK: if any theorem counters have section:level as parent, reset
+            #### If any theorem counters have section:level as parent, reset
             for theorem_counter in amsthm_settings.theorem_counters:
-                if amsthm_settings.theorems[theorem_counter].parent_counter == LEVEL_TO_SECTION.get(level):
+                if amsthm_settings.theorems[theorem_counter].parent_counter == section:
                     amsthm_settings.theorem_counters[theorem_counter] = 0
 
-            #logger.info(str(amsthm_settings.section_counters))
-            #logger.info(str(amsthm_settings.theorem_counters))
+            # Reset equation counter on new section
+            if section == 'section':
+                amsthm_settings.equation_counter = 1
+
 
     elif isinstance(elem, pf.Math):
-        if elem.format == 'DisplayMath':
-            if re.search(r'\\label{.*}',elem.text):
-                current_text = elem.text
-                elem.text = "\\begin{equation}" + current_text + "\\end{equation}"
-                return elem
+
+        if re.findall(r'\\label{.*}', elem.text):
+
+            if re.search(r'\\begin{aligned}', elem.text):
+                # MathJax doesn't number 'aligned' environments, so change to 'align'
+                elem.text = re.sub(r'\\begin{aligned}', r'\\begin{align}', elem.text)
+                elem.text = re.sub(r'\\end{aligned}', r'\\end{align}', elem.text)
+
+
+                matches = re.finditer(r'\\label{.*}', elem.text)
+                offset_from_previously_added = 0
+                for match in matches:
+                    if amsthm_settings.number_within:
+                        equation_number : str = str(amsthm_settings.section_counters[0]) + '.' + str(amsthm_settings.equation_counter)
+                        # Calculate index of end of match, accounting for adding characters to elem.text previously
+                        index = match.end() + offset_from_previously_added
+                        elem.text = elem.text[:index] + '\\tag{'+equation_number+'}' + elem.text[index:]
+                        offset_from_previously_added += len('\\tag{'+equation_number+'}')
+                    amsthm_settings.equation_counter += 1
+            else:
+                # Put Math inside \begin{equation} tags so that MathJax automatically numbers the equation
+                current_text : str = elem.text
+                if amsthm_settings.number_within:
+                    equation_number : str = str(amsthm_settings.section_counters[0]) + '.' + str(amsthm_settings.equation_counter)
+                    elem.text = '\\begin{equation}' + current_text + '\\tag{'+equation_number+'}' + '\\end{equation}'
+                else:
+                    elem.text = '\\begin{equation}' + current_text +  '\\end{equation}'
+
+                amsthm_settings.equation_counter += 1
+
+        return elem
 
     elif isinstance(elem, pf.Div):
         environments: set[str] = set(amsthm_settings.theorems).intersection(elem.classes)
@@ -186,51 +239,62 @@ def amsthm_numbering(elem: pf.Element, doc: pf.Doc) -> None:
                     thm_counter = env_name
                     amsthm_settings.theorem_counters[env_name] += 1
 
-                ## NEED: a way to generate titles and replace Strong elem with new title
-                #logger.info(str(env_name))
-                #logger.info("using thm_counter: "+str(thm_counter))
-                theorem_number = str(amsthm_settings.section_counters[0]) + '.' + str(amsthm_settings.theorem_counters[thm_counter])
-                nah = [pf.Str(theorem_type.text), pf.Space, pf.Str(theorem_number)]
+                #################################################################
+                ## NEED: improve this section to make it more robust and readable.
+
+                theorem_number : str = str(amsthm_settings.section_counters[0]) + '.' + str(amsthm_settings.theorem_counters[thm_counter])
+                theorem_text : list[pf.Element] = [pf.Str(theorem_type.text), pf.Space, pf.Str(theorem_number)]
 
                 amsthm_settings.identifiers[id] = theorem_number
 
                 if not isinstance(elem.content[0], pf.Para):
-                    logger.warning("not good...")
+                    logger.warning("Theorem environment not wrapped in Para!")
                 elif not isinstance(elem.content[0].content[0], pf.Strong):
-                    logger.warning('also not good...')
+                    logger.warning('Theorem environment does not have a Strong elem at the start!')
                 else:
-                    strong = elem.content[0].content[0]
-                    strong.content = nah
+                    strong : pf.Strong = elem.content[0].content[0]
+                    strong.content = theorem_text
 
 def link_to_ref_type(elem: pf.Link) -> tuple[str, str] | None:
+    """
+        Takes a panflute Link element and returns its reference and reference-type.
+    """
+
     if not 'reference' in elem.attributes:
         logger.warning("Link: %s has no reference. Ignoring...", elem)
         return None
-    reference: pf.Str = elem.attributes.get('reference', None)
+
+    reference : pf.Str = elem.attributes.get('reference', None)
     type = elem.attributes.get('reference-type', None)
+
     return reference, type
 
 
 def resolve_ref(elem: pf.Element, doc: pf.Doc) -> None:
+    """
+        Action that corrects Link text for theorem and equation references.
+    """
 
     amsthm_settings: AmsthmSettings = doc._amsthm_settings
     if isinstance(elem, pf.Link):
         ref, type = link_to_ref_type(elem)
+
         if type == "eqref":
+            # Put \eqref inside Math tags, so that MathJax can see it
             elem.content = [pf.Math("\\eqref{"+ref+"}",format='InlineMath')]
             return elem
-        if type is not None and ref in amsthm_settings.identifiers:
+
+        elif type is not None and ref in amsthm_settings.identifiers:
             if type == "ref":
+                # if reference is in identifiers, replace it with correct text
                 elem.content = [pf.Str(amsthm_settings.identifiers[ref])]
                 return elem
 
 ### TODO:
 #  - if it is a plain style, make it italic.
 #  - are styles exactly right? -- currently all the same.
-#  - for \eqref, put this inside a pf.Math() -- `see resolve_ref`
 #  - if it is display math and has \label, put it in \begin{equation} tags?
-#  - add mathjax config with support for ams
-#  - create dict in amsthm_settings for ref -> number
+#  - add mathjax config with support for ams, and \numberwithin command
 
 ## EXTRAS?
 # - number swapping in theorems?
