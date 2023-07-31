@@ -26,7 +26,7 @@ import logging
 import sys
 import panflute as pf
 
-from ams import AmsthmSettings, AmsTheorem, amsthm_numbering, resolve_ref
+from pandocmath.ams import AmsthmSettings, AmsTheorem, amsthm_numbering, resolve_ref
 
 logging.basicConfig(stream=sys.stderr, level=logging.INFO)
 logger = logging.getLogger(__name__)

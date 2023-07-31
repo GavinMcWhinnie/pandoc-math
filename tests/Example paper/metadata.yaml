@@ -1,0 +1,20 @@
+---
+amsthm_settings:
+  number_within: true
+  definition:
+  - {env_name: lemma, text: Lemma, parent_counter: section}
+  - {env_name: definition, text: Defintion, shared_counter: lemma}
+  - {env_name: theorem, text: Theorem, shared_counter: lemma}
+  - {env_name: question, text: Question, shared_counter: lemma}
+  - {env_name: example, text: Example, shared_counter: lemma}
+  - {env_name: examples, text: Examples, shared_counter: lemma}
+  - {env_name: remark, text: Remark, shared_counter: lemma}
+  - {env_name: corollary, text: Corollary, shared_counter: lemma}
+  - {env_name: proposition, text: Proposition, shared_counter: lemma}
+  - {env_name: exercise, text: Exercise, shared_counter: lemma}
+  - {env_name: exercises, text: Exercises, shared_counter: lemma}
+  - {env_name: remarks, text: Remarks, shared_counter: lemma}
+  remark:
+  - {env_name: notation, text: Notation, shared_counter: lemma}
+  - {env_name: ackn, text: Acknowledgements, shared_counter: lemma}
+...
