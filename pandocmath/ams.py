@@ -79,7 +79,7 @@ class AmsTheorem:
     text: str
     parent_counter: str | None = None
     shared_counter: str | None = None
-    numbered: bool = False
+    numbered: bool = True
 
 class AmsthmSettings:
 
@@ -122,7 +122,7 @@ class AmsthmSettings:
                     text : str = theorem.get('text')
                     parent_counter : str = theorem.get('parent_counter')
                     shared_counter : str = theorem.get('shared_counter')
-                    numbered : bool = theorem.get('numbered')
+                    numbered : bool = theorem.get('numbered', True)
 
                     # NewTheorem environment has shared counter
                     if shared_counter is not None:

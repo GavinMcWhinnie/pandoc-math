@@ -26,9 +26,14 @@ import logging
 import sys
 import panflute as pf
 import argparse
+import os
+import tempfile
+import subprocess
+import yaml
 from pathlib import Path
 
 from pandocmath.filter import action1, action2, prepare, finalize
+from pandocmath.helper import read_metadata_from_file
 
 logging.basicConfig(stream=sys.stderr, level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -57,14 +62,28 @@ def main() -> None:
             pf.dump(doc)
 
         else:
+            logger.info(target_format)
             logger.error('The filter pandoc-math is only intended for converting with output to html.')
     else:
 
         path = Path(args.file)
         if path.is_file():
             if (filetype := path.suffix.lower()) == '.tex':
+
                 ####### TODO: finish here
-                pass
+                metadata_file = tempfile.NamedTemporaryFile(delete=False)
+
+                metadata = read_metadata_from_file(args.file)
+                yaml.dump(metadata, metadata_file, encoding = 'utf-8')
+
+                command = ["pandoc",args.file,"-o",path.stem+'.html',"-s","--mathjax","--filter","pandoc-math","--metadata-file",metadata_file.name,"--number-sections"]
+                res = subprocess.run(command, shell=True, capture_output=True)
+                logger.info(res.stdout.decode('utf-8').replace(r"\r\n", r"\n"))
+                logger.error(res.stderr.decode('utf-8').replace(r"\r\n", r"\n"))
+
+                metadata_file.close()
+                os.remove(metadata_file.name)
+
             else:
                 logger.error("Please input a .tex file only.")
         else:
