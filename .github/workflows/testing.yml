@@ -15,18 +15,24 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.x'
+        python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install panflute pylatexenc
+        pip install pytest panflute pylatexenc
 
     - name: Install dependencies-pandocmath
       run: |
-        sudo wget https://github.com/jgm/pandoc/releases/download/3.1.6.1/pandoc-3.1.6.1-1-amd64.deb
+        sudo wget --quiet https://github.com/jgm/pandoc/releases/download/3.1.6.1/pandoc-3.1.6.1-1-amd64.deb
         sudo dpkg -i pandoc-3.1.6.1-1-amd64.deb
 
     - name: Test with pytest
-      run: |
-        pip install pytest pytest-cov
-        pytest tests/tests.py --doctest-modules --junitxml=tests/junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+      run: pytest tests/tests.py --doctest-modules --junitxml=junit/test-results-${{ matrix.python-version }}.xml
+
+    - name: Upload pytest test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: pytest-results-${{ matrix.python-version }}
+          path: junit/test-results-${{ matrix.python-version }}.xml
+        # Use always() to always run this step to publish test results when there are test failures
+        if: ${{ always() }}
