@@ -1,11 +1,13 @@
+import logging
+from typing import List
+
 from pylatexenc.latexwalker import *
 from pylatexenc.macrospec import *
 
 # Setup logging
-import logging
 logger : logging.Logger = logging.getLogger(__name__)
 
-THEOREM_SETTINGS : list[str] = ['numbered','env_name','shared_counter','text','parent_counter']
+THEOREM_SETTINGS : List[str] = ['numbered','env_name','shared_counter','text','parent_counter']
 
 newtheorem : MacroSpec = MacroSpec("newtheorem", args_parser='*{[{[')
 theoremstyle : MacroSpec = MacroSpec("theoremstyle", args_parser='{')
@@ -30,7 +32,7 @@ def extract_text_from_argument(node : LatexNode) -> str:
 def get_metadata_from_latex(latex_source : str) -> dict:
 
     w : latexwalker.LatexWalker = LatexWalker(latex_source, latex_context=db)
-    nodelist : list[LatexNode]
+    nodelist : List[LatexNode]
     (nodelist, pos, len_) = w.get_latex_nodes(pos=0)
 
     amsthm_settings : dict = {}
@@ -68,7 +70,7 @@ def get_metadata_from_latex(latex_source : str) -> dict:
 
                 # Only support numbering equations within section currently,
                 # this could be extended to many more counters
-                args : list[LatexNode] = node.nodeargd.argnlist
+                args : List[LatexNode] = node.nodeargd.argnlist
                 if len(args) == 2:
                     if extract_text_from_argument(args[0]) == 'equation' and \
                         extract_text_from_argument(args[1]) == 'section':
