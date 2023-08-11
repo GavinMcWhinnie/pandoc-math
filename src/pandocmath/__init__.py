@@ -1,3 +1,3 @@
-import pandocmath
+from pandocmath._version import __version__
 
-__version__ = "0.0.1"
+import pandocmath.pandocmath

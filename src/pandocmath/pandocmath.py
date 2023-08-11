@@ -32,58 +32,81 @@ import subprocess
 import yaml
 from pathlib import Path
 
+from pandocmath._version import __version__
 from pandocmath.filter import action1, action2, prepare, finalize
 from pandocmath.latex_reader import read_metadata_from_file
 
-logging.basicConfig(stream=sys.stderr, level=logging.INFO)
-logger = logging.getLogger(__name__)
+# Setup logging
+logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+logger : logging.Logger = logging.getLogger(__name__)
 
-__version__ = "0.0.1"
-
-OUTPUT_FORMATS = pf.run_pandoc(args=['--list-output-formats']).split('\r\n')
+# CONSTANTS
+PANDOC_OUTPUT_FORMATS : list[str] = pf.run_pandoc(args=['--list-output-formats']).split('\r\n')
 
 def main() -> None:
-    parser = argparse.ArgumentParser( description='Hello world!')
+
+    parser : argparse.ArgumentParser = argparse.ArgumentParser(
+        prog='pandoc-math',
+        description='A pandoc filter for converting LaTeX to html for mathematics documents.',
+        epilog='For more help, see the documentation at https://gavinmcwhinnie.github.io/pandoc-math/'
+    )
     parser.add_argument('file', help='TeX file to be converted')
     parser.add_argument('--version', action='version', version=__version__)
     #parser.add_argument('-o', default='output.html', help='output file')
-    args = parser.parse_args()
+    args : argparse.Namespace = parser.parse_args()
 
-    if args.file in OUTPUT_FORMATS:
+    if args.file in PANDOC_OUTPUT_FORMATS:
 
-        #### The filter is being called by Pandoc, run as a json filter
+        #### pandoc-math is being called by Pandoc, run as a json filter
 
         target_format : str = args.file
         if target_format == 'html':
-            doc = pf.load()
+
+            # Read JSON-encoded document from stdin
+            doc : pf.Doc = pf.load()
+
+            # Run panflute filters
             pf.run_filters(
                 (action1, action2),
                 prepare=prepare,
                 finalize=finalize,
                 doc=doc,
             )
+
+            # Dump JSON-encoded text string to stdout
             pf.dump(doc)
 
         else:
-            logger.info(target_format)
             logger.error('The filter pandoc-math is only intended for converting with output to html.')
     else:
 
-        path = Path(args.file)
+        #### pandoc-math is being called by user
+
+        path : Path = Path(args.file)
+
         if path.is_file():
             if (filetype := path.suffix.lower()) == '.tex':
 
                 ####### TODO: finish here
-                metadata_file = tempfile.NamedTemporaryFile(delete=False)
+                metadata_file : tempfile.NamedTemporaryFile = tempfile.NamedTemporaryFile(delete=False)
 
-                metadata = read_metadata_from_file(args.file)
+                # Read metadata in from
+                metadata : dict = read_metadata_from_file(str(path))
                 yaml.dump(metadata, metadata_file, encoding = 'utf-8')
 
-                command = ["pandoc",args.file,"-o",path.stem+'.html',"-s","--mathjax","--filter","pandoc-math","--metadata-file",metadata_file.name,"--number-sections"]
-                res = subprocess.run(command, shell=True, capture_output=True)
-                logger.info(res.stdout.decode('utf-8').replace(r"\r\n", r"\n"))
-                logger.error(res.stderr.decode('utf-8').replace(r"\r\n", r"\n"))
+                command : list[str] = ["pandoc", str(path), "-o", path.stem+'.html', "-s", "--mathjax", "--filter", "pandoc-math",
+                    "--metadata-file", metadata_file.name, "--number-sections"]
+                res : subprocess.CompletedProcess = subprocess.run(command, shell=True, capture_output=True)
 
+                # pandoc-math logging goes to stderr
+                stdout : str = res.stdout.decode('utf-8').replace(r"\r\n", r"\n")
+                stderr : str = res.stderr.decode('utf-8').replace(r"\r\n", r"\n")
+                # Print logging and errors to stdout
+                if stdout:
+                    print(stdout)
+                print(stderr)
+
+                # Close the temporary metadata file
                 metadata_file.close()
                 os.remove(metadata_file.name)
 
@@ -91,7 +114,6 @@ def main() -> None:
                 logger.error("Please input a .tex file only.")
         else:
             logger.error("No such file exists: "+str(args.file)+"\nPlease try again.")
-
 
 
 if __name__ == "__main__":

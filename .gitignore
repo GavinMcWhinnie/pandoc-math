@@ -3,3 +3,4 @@ build
 src/pandocmath/__pycache__
 site/
 tests/.pytest_cache
+tests/__pycache__
