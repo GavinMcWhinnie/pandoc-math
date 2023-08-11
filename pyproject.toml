@@ -6,12 +6,9 @@ build-backend = "setuptools.build_meta"
 #py-modules = ["pandocmath"]
 package-dir = {"" = "src"}
 
-[tool.setuptools.dynamic]
-version = {attr = "pandocmath.__version__"}
-
 [project]
 name = "pandoc-math"
-dynamic = ["version"]
+version = "0.0.1"
 authors = [
   { name="Gavin McWhinnie", email="gmcwhinn@ed.ac.uk" },
 ]
