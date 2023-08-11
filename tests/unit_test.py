@@ -5,7 +5,7 @@ from pathlib import Path
 ## Units to be tested:
 
 # __init__.py - not sure how to call with arguments etc...
-# helper.py - should be renamed to latex-reader
+# latex_reader.py - should be renamed to latex-reader
 # filter.py - load full Doc object from latex test file and check it converts correct
 # ams.py ? not sure how
 
@@ -38,5 +38,3 @@ def test_latex_reader_from_file():
     actual = read_metadata_from_file(str(path.resolve()))
 
     assert expected == actual
-
-test_latex_reader_from_file()

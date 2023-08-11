@@ -5,10 +5,12 @@ on: [push]
 jobs:
   build:
 
-    runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+        os: [ubuntu-latest, windows-latest]
+
+    runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v3
@@ -27,8 +29,15 @@ jobs:
 
     - name: Install dependencies-pandocmath
       run: |
-        sudo wget --quiet https://github.com/jgm/pandoc/releases/download/3.1.6.1/pandoc-3.1.6.1-1-amd64.deb
-        sudo dpkg -i pandoc-3.1.6.1-1-amd64.deb
+         if [ "$RUNNER_OS" == "Linux" ]; then
+              sudo wget --quiet https://github.com/jgm/pandoc/releases/download/3.1.6.1/pandoc-3.1.6.1-1-amd64.deb
+              sudo dpkg -i pandoc-3.1.6.1-1-amd64.deb
+         elif [ "$RUNNER_OS" == "Windows" ]; then
+              choco install pandoc
+         else
+              echo "$RUNNER_OS not supported"
+              exit 1
+         fi
 
     - name: Test with pytest
       run: pytest tests --doctest-modules
