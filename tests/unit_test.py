@@ -1,4 +1,5 @@
 import panflute as pf
+from pathlib import Path
 
 ############ UNIT TESTING ##########################
 ## Units to be tested:
@@ -31,6 +32,11 @@ def test_latex_reader_from_file():
         'number_within': True
     }}
 
-    actual = read_metadata_from_file("./files/latex_reader_test.tex")
+    relative_path = Path("files/latex_reader_test.tex")
+    path : Path= Path(__file__).parent / relative_path
+    path = path.resolve(strict=True)
+    actual = read_metadata_from_file(str(path.resolve()))
 
     assert expected == actual
+
+test_latex_reader_from_file()
