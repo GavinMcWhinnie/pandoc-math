@@ -64,7 +64,7 @@ import logging
 import panflute as pf
 import re
 
-from typing import Dict
+from typing import Dict, List
 
 logger = logging.getLogger(__name__)
 
@@ -88,7 +88,7 @@ class AmsTheorem:
 class AmsthmSettings:
 
     theorems: Dict[str, AmsTheorem]
-    section_counters : list[int]
+    section_counters :List[int]
     theorem_counters : Dict[str, int]
     identifiers : Dict[str, str]
     number_within: bool = False
@@ -119,7 +119,7 @@ class AmsthmSettings:
             logger.info('Numbering within sections set to: '+str(numberwithin).upper())
 
         for style in AMSTHM_STYLES:
-            theorems_list: list[THEOREM_DATA] = metadata.get(style)
+            theorems_list: List[THEOREM_DATA] = metadata.get(style)
             if theorems_list:
                 for theorem in theorems_list:
                     # Get individual theorem data from metadata
@@ -249,7 +249,7 @@ def amsthm_numbering(elem: pf.Element, doc: pf.Doc) -> None:
                 ## NEED: improve this section to make it more robust and readable.
 
                 theorem_number : str = str(amsthm_settings.section_counters[0]) + '.' + str(amsthm_settings.theorem_counters[thm_counter])
-                theorem_text : list[pf.Element] = [pf.Str(theorem_type.text), pf.Space, pf.Str(theorem_number)]
+                theorem_text : List[pf.Element] = [pf.Str(theorem_type.text), pf.Space, pf.Str(theorem_number)]
 
                 amsthm_settings.identifiers[id] = theorem_number
 

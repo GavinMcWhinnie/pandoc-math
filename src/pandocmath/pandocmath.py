@@ -32,6 +32,8 @@ import subprocess
 import yaml
 from pathlib import Path
 
+from typing import Dict, List
+
 from pandocmath._version import __version__
 from pandocmath.filter import action1, action2, prepare, finalize
 from pandocmath.latex_reader import read_metadata_from_file
@@ -41,7 +43,7 @@ logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 logger : logging.Logger = logging.getLogger(__name__)
 
 # CONSTANTS
-PANDOC_OUTPUT_FORMATS : list[str] = pf.run_pandoc(args=['--list-output-formats']).split('\r\n')
+PANDOC_OUTPUT_FORMATS : List[str] = pf.run_pandoc(args=['--list-output-formats']).split('\r\n')
 
 def main() -> None:
 
@@ -95,7 +97,7 @@ def main() -> None:
                 metadata : dict = read_metadata_from_file(str(path))
                 yaml.dump(metadata, metadata_file, encoding = 'utf-8')
 
-                command : list[str] = ["pandoc", str(path), "-o", path.stem+'.html', "-s", "--mathjax", "--filter", "pandoc-math",
+                command : List[str] = ["pandoc", str(path), "-o", path.stem+'.html', "-s", "--mathjax", "--filter", "pandoc-math",
                     "--metadata-file", metadata_file.name, "--number-sections"]
                 res : subprocess.CompletedProcess = subprocess.run(command, shell=True, capture_output=True)
 
