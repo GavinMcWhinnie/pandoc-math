@@ -3,8 +3,6 @@ logger = logging.getLogger(__name__)
 
 from pylatexenc.latexwalker import *
 from pylatexenc.macrospec import *
-import yaml
-import tempfile, os
 
 THEOREM_SETTINGS = ['numbered','env_name','shared_counter','text','parent_counter']
 
@@ -69,83 +67,3 @@ def read_metadata_from_file(filename):
 
     dictionary = {'amsthm_settings':amsthm_settings}
     return dictionary
-"""
-
-def print_group_node(node):
-    string = ""
-    if node.nodelist:
-        for sub_node in node.nodelist:
-            if sub_node.isNodeType(LatexCharsNode):
-                string += sub_node.chars
-    return node.delimiters[0] + string + node.delimiters[1]
-
-def extract_text(node):
-    if node.nodelist:
-        if node.nodelist[0].isNodeType(LatexCharsNode):
-            return node.nodelist[0].chars
-    logger.error("uh oh")
-
-file = "C:\\Users\\gmcwhinn\\Documents\\GitHub\\pandoc-math\\pandocmath\\input.tex"
-
-f = open(file, "r")
-
-newtheorem = macrospec.MacroSpec("newtheorem", args_parser='*{[{[')
-theoremstyle = macrospec.MacroSpec("theoremstyle", args_parser='{')
-numberwithin = macrospec.MacroSpec("numberwithin", args_parser='{{')
-
-db = get_default_latex_context_db()
-db.add_context_category("amsthm", [newtheorem, theoremstyle, numberwithin])
-
-w = LatexWalker(f.read(), latex_context=db)
-(nodelist, pos, len_) = w.get_latex_nodes(pos=0)
-
-#{'amsthm_settings': {'number_within': True, 'definition':
-#[{'env_name': 'lemma', 'text': 'Lemma', 'parent_counter': 'section'}]}}
-amsthm_settings = {'definition':[],'plain':[],'remark':[]}
-
-settings = ['env_name','shared_counter','text','parent_counter']
-
-
-style = ''
-for i, node in enumerate(nodelist):
-
-    if node.isNodeType(LatexMacroNode):
-
-        if node.macroname == 'theoremstyle':
-            for arg in node.nodeargs:
-                style = extract_text(arg)
-
-        if node.macroname == 'newtheorem':
-            print(i)
-            theorem_dict = {}
-            for i, arg in enumerate(node.nodeargs):
-                if arg:
-                    if arg.isNodeType(LatexGroupNode):
-                        if i != 0:
-                            theorem_dict[settings[i-1]] = extract_text(arg)
-
-            amsthm_settings[style].append(theorem_dict)
-
-
-        if node.macroname == 'numberwithin':
-            amsthm_settings['numberwithin'] = True
-            #print(i)
-            #print("\\numberwithin")
-            #for arg in node.nodeargs:
-            #    if arg:
-            #        print(print_group_node(arg))
-
-
-f.close()
-
-dictionary = {'amsthm_settings':amsthm_settings}
-
-tmp = tempfile.NamedTemporaryFile(delete=False)
-print(tmp.name)
-yaml.dump(dictionary, tmp, encoding = 'utf-8')
-
-#### DO PANDOC COMMAND HERE
-
-tmp.close()
-os.remove(tmp.name)
-"""

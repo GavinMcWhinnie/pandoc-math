@@ -1,4 +1,4 @@
-pandoc_math.egg-info
+src/pandoc_math.egg-info
 build
 pandocmath/__pycache__
 site/

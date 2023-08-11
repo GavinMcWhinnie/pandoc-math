@@ -3,10 +3,11 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-py-modules = ["pandocmath"]
+#py-modules = ["pandocmath"]
+package-dir = {"" = "src"}
 
 [tool.setuptools.dynamic]
-version = {attr = "package.__version__"}
+version = {attr = "pandocmath.__version__"}
 
 [project]
 name = "pandoc-math"
@@ -28,11 +29,12 @@ dependencies = [
   "pylatexenc >= 2.10"
 ]
 
-
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [project.urls]
 "Homepage" = "https://github.com/GavinMcWhinnie/pandoc-math"
 "Bug Tracker" = "https://github.com/GavinMcWhinnie/pandoc-math/issues"
 
 [project.scripts]
-pandoc-math = "pandocmath:main"
+pandoc-math = "pandocmath.pandocmath:main"

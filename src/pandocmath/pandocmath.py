@@ -33,7 +33,7 @@ import yaml
 from pathlib import Path
 
 from pandocmath.filter import action1, action2, prepare, finalize
-from pandocmath.helper import read_metadata_from_file
+from pandocmath.latex_reader import read_metadata_from_file
 
 logging.basicConfig(stream=sys.stderr, level=logging.INFO)
 logger = logging.getLogger(__name__)
