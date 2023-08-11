@@ -38,11 +38,14 @@ from pandocmath.helper import read_metadata_from_file
 logging.basicConfig(stream=sys.stderr, level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+__version__ = "0.0.1"
+
 OUTPUT_FORMATS = pf.run_pandoc(args=['--list-output-formats']).split('\r\n')
 
 def main() -> None:
     parser = argparse.ArgumentParser( description='Hello world!')
     parser.add_argument('file', help='TeX file to be converted')
+    parser.add_argument('--version', action='version', version=__version__)
     #parser.add_argument('-o', default='output.html', help='output file')
     args = parser.parse_args()
 
