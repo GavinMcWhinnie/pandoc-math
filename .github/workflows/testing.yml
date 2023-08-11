@@ -38,6 +38,7 @@ jobs:
               echo "$RUNNER_OS not supported"
               exit 1
          fi
+      shell: bash
 
     - name: Test with pytest
       run: pytest tests --doctest-modules
