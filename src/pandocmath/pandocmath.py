@@ -85,7 +85,8 @@ def main() -> None:
         path : Path = Path(args.file)
 
         if path.is_file():
-            if (filetype := path.suffix.lower()) == '.tex':
+            filetype : str = path.suffix.lower()
+            if filetype == '.tex':
 
                 ####### TODO: finish here
                 metadata_file : tempfile.NamedTemporaryFile = tempfile.NamedTemporaryFile(delete=False)

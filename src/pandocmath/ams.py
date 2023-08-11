@@ -64,6 +64,8 @@ import logging
 import panflute as pf
 import re
 
+from typing import Dict
+
 logger = logging.getLogger(__name__)
 
 # Constants
@@ -72,7 +74,7 @@ MAX_SECTION_DEPTH = 3
 LEVEL_TO_SECTION = {1: "section", 2: "subsection", 3: "subsubsection"}
 
 # Type Aliases
-THEOREM_DATA = dict[str,str]
+THEOREM_DATA = Dict[str,str]
 
 @dataclass
 class AmsTheorem:
@@ -85,10 +87,10 @@ class AmsTheorem:
 
 class AmsthmSettings:
 
-    theorems: dict[str, AmsTheorem]
+    theorems: Dict[str, AmsTheorem]
     section_counters : list[int]
-    theorem_counters : dict[str, int]
-    identifiers : dict[str, str]
+    theorem_counters : Dict[str, int]
+    identifiers : Dict[str, str]
     number_within: bool = False
     equation_counter : int
 
@@ -109,9 +111,10 @@ class AmsthmSettings:
             Read amsthm_settings metadata to setup options on theorem styles and counters.
         """
 
-        metadata: dict[str, dict] = doc.get_metadata("amsthm_settings")
+        metadata: Dict[str, dict] = doc.get_metadata("amsthm_settings")
 
-        if (numberwithin := metadata.get('number_within')):
+        numberwithin : bool | None = metadata.get('number_within')
+        if numberwithin:
             self.number_within = numberwithin
             logger.info('Numbering within sections set to: '+str(numberwithin).upper())
 
@@ -235,7 +238,8 @@ def amsthm_numbering(elem: pf.Element, doc: pf.Doc) -> None:
                 id : str = elem.identifier
 
                 ## Update counters
-                if (thm_counter := theorem_type.shared_counter) is not None:
+                thm_counter : str | None = theorem_type.shared_counter
+                if thm_counter is not None:
                     amsthm_settings.theorem_counters[thm_counter] += 1
                 elif env_name in amsthm_settings.theorem_counters:
                     thm_counter = env_name
