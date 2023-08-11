@@ -1,6 +1,13 @@
-site_name: pandoc-math Documentation
+site_name: Pandoc-math Documentation
 theme:
   name: material
   palette:
     scheme: default
     primary: teal
+
+plugins:
+  - search
+  - mkdocstrings
+
+watch:
+  - src
