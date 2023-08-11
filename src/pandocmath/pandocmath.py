@@ -48,7 +48,6 @@ logger : logging.Logger = logging.getLogger(__name__)
 PANDOC_OUTPUT_FORMATS : List[str] = pf.run_pandoc(args=['--list-output-formats']).split('\r\n')
 
 def main() -> None:
-
     parser : argparse.ArgumentParser = argparse.ArgumentParser(
         prog='pandoc-math',
         description='A pandoc filter for converting LaTeX to html for mathematics documents.',

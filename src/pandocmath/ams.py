@@ -144,7 +144,7 @@ class AmsthmSettings:
 
 def replace_qed_here(elem: pf.Element, doc: pf.Doc) -> None:
     """
-        Helper function that replaces \qedhere in proof environment.
+        Helper function that replaces \\qedhere in proof environment.
     """
 
     qed_symbol : str = chr(9723)
