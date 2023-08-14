@@ -19,4 +19,5 @@ jobs:
           path: .cache
       - run: pip install mkdocs-material==9.1.19
       - run: pip install mkdocstrings
+      - run: pip install mkdocs-git-revision-date-localized-plugin
       - run: mkdocs gh-deploy --force
