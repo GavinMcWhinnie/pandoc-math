@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="AI-generated content by OpenAI’s GPT-3" />
+  <meta name="dcterms.date" content="2023-08-11" />
+  <title>An Introduction to Differential Geometry</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    div.abstract {
+      margin: 2em 2em 2em 2em;
+      text-align: left;
+      font-size: 85%;
+    }
+    div.abstract-title {
+      font-weight: bold;
+      text-align: center;
+      padding: 0;
+      margin-bottom: 0.5em;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+  </style>
+  <script> MathJax = {   loader: {     load: ['[custom]/xypic.js'],     paths: {custom: 'https://cdn.jsdelivr.net/gh/sonoisa/XyJax-v3@3.0.1/build/'}   },   tex: {     packages: {'[+]': ['xypic']},     macros : { relax: ''},     tags: 'ams'   } }; </script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js"
+  type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">An Introduction to Differential Geometry</h1>
+<p class="author">AI-generated content by OpenAI’s GPT-3</p>
+<p class="date">2023-08-11</p>
+<div class="abstract">
+<div class="abstract-title">Abstract</div>
+<p>This article on differential geometry is generated by OpenAI’s
+language model, GPT-3. While efforts have been made to provide accurate
+and relevant information, it is essential to acknowledge that
+AI-generated content may contain errors, inaccuracies, or lack complete
+human understanding. Readers should exercise caution and critically
+evaluate the information presented. It is recommended to consult
+authoritative sources and subject matter experts for further
+verification and clarification. OpenAI and the author do not guarantee
+the accuracy or reliability of the information provided in this article.
+Use this content responsibly and at your own discretion.</p>
+</div>
+</header>
+<h1 data-number="1" id="introduction"><span
+class="header-section-number">1</span> Introduction</h1>
+<p>Differential geometry is a branch of mathematics that studies smooth
+and curved spaces using calculus and algebraic techniques. It provides a
+powerful framework to study geometric objects, such as curves and
+surfaces, and their properties. This paper serves as an introduction to
+some of the central ideas and results in differential geometry.</p>
+<h1 data-number="2" id="smooth-manifolds"><span
+class="header-section-number">2</span> Smooth Manifolds</h1>
+<p>In this section, we introduce the concept of smooth manifolds and
+define differentiable maps between them.</p>
+<div class="definition">
+<p><strong>Defintion 2.1</strong> (Smooth Manifold). A <em>smooth
+manifold</em> of dimension <span class="math inline">\(n\)</span> is a
+Hausdorff topological space <span class="math inline">\(M\)</span>
+equipped with an atlas <span class="math inline">\(\mathcal{A} =
+\{(U_\alpha, \phi_\alpha)\}\)</span>, where each <span
+class="math inline">\(U_\alpha \subseteq M\)</span> is open and <span
+class="math inline">\(\phi_\alpha: U_\alpha \to \mathbb{R}^n\)</span> is
+a homeomorphism. The maps <span
+class="math inline">\(\phi_\alpha\)</span> are called <em>smooth
+charts</em>, and their compositions <span
+class="math inline">\(\phi_\alpha \circ \phi_\beta^{-1}\)</span> on
+<span class="math inline">\(U_\alpha \cap U_\beta\)</span> are
+smooth.</p>
+</div>
+<div class="theorem">
+<p><strong>Theorem 2.2</strong>. Let <span
+class="math inline">\(M\)</span> be a smooth manifold. Then, for any
+smooth chart <span class="math inline">\((U, \phi)\)</span> on <span
+class="math inline">\(M\)</span>, the transition maps <span
+class="math inline">\(\phi \circ \psi^{-1}: \phi(U \cap V) \to \psi(U
+\cap V)\)</span> are smooth for all other charts <span
+class="math inline">\((V, \psi)\)</span> in the atlas <span
+class="math inline">\(\mathcal{A}\)</span>.</p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Let <span class="math inline">\((U, \phi)\)</span>
+and <span class="math inline">\((V, \psi)\)</span> be two smooth charts
+in <span class="math inline">\(\mathcal{A}\)</span>, and let <span
+class="math inline">\(p \in U \cap V\)</span>. Without loss of
+generality, assume <span class="math inline">\(p = \psi^{-1}(x_0) \in
+V\)</span>, where <span class="math inline">\(x_0 \in
+\mathbb{R}^n\)</span>. Since <span class="math inline">\(\phi\)</span>
+and <span class="math inline">\(\psi\)</span> are homeomorphisms, <span
+class="math inline">\(U \cap V\)</span> is an open set in both <span
+class="math inline">\(\mathbb{R}^n\)</span> and <span
+class="math inline">\(M\)</span>.</p>
+<p>Now, consider the composition <span class="math inline">\(\phi \circ
+\psi^{-1}: \phi(U \cap V) \to \psi(U \cap V)\)</span>. For any <span
+class="math inline">\(x \in \phi(U \cap V)\)</span>, we have <span
+class="math inline">\(x = \phi(p&#39;)\)</span> for some <span
+class="math inline">\(p&#39; \in U \cap V\)</span>. Thus, <span
+class="math display">\[\begin{aligned}
+(\phi \circ \psi^{-1})(x) &amp;= \phi(\psi^{-1}(x)) \\
+&amp;= \phi(p&#39;) \\
+&amp;= \phi \circ \psi^{-1}(p&#39;) \\
+&amp;= \phi \circ \psi^{-1} \circ \psi \circ \psi^{-1}(p&#39;) \\
+&amp;= (\phi \circ \psi^{-1} \circ \psi)(x_0).
+\end{aligned}\]</span> Since <span class="math inline">\(\phi \circ
+\psi^{-1} \circ \psi\)</span> is the composition of smooth functions, it
+is itself smooth. Therefore, <span class="math inline">\(\phi \circ
+\psi^{-1}\)</span> is smooth on <span class="math inline">\(\phi(U \cap
+V)\)</span>, and the theorem follows. ◻</p>
+</div>
+<div class="definition">
+<p><strong>Defintion 2.3</strong> (Differentiable Map). Let <span
+class="math inline">\(M\)</span> and <span
+class="math inline">\(N\)</span> be smooth manifolds. A map <span
+class="math inline">\(f: M \to N\)</span> is called
+<em>differentiable</em> (or smooth) if, for every smooth chart <span
+class="math inline">\((U, \phi)\)</span> on <span
+class="math inline">\(M\)</span> and smooth chart <span
+class="math inline">\((V, \psi)\)</span> on <span
+class="math inline">\(N\)</span>, the composition <span
+class="math inline">\(\psi^{-1} \circ f \circ \phi\)</span> is smooth as
+a map from <span class="math inline">\(\phi(U \cap f^{-1}(V))\)</span>
+to <span class="math inline">\(\psi(V)\)</span>.</p>
+</div>
+<div class="theorem">
+<p><strong>Theorem 2.4</strong>. The composition of differentiable maps
+is differentiable. That is, if <span class="math inline">\(f: M \to
+N\)</span> and <span class="math inline">\(g: N \to P\)</span> are
+differentiable maps between smooth manifolds, then <span
+class="math inline">\(g \circ f: M \to P\)</span> is also
+differentiable.</p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Let <span class="math inline">\((U, \phi)\)</span> be
+a smooth chart on <span class="math inline">\(M\)</span>, <span
+class="math inline">\((V, \psi)\)</span> be a smooth chart on <span
+class="math inline">\(N\)</span>, and <span class="math inline">\((W,
+\chi)\)</span> be a smooth chart on <span
+class="math inline">\(P\)</span>. Since <span
+class="math inline">\(f\)</span> and <span
+class="math inline">\(g\)</span> are differentiable, we have smooth
+compositions <span class="math inline">\(\psi^{-1} \circ f \circ
+\phi\)</span> and <span class="math inline">\(\chi^{-1} \circ g \circ
+\psi\)</span>, which are both smooth maps between open subsets of <span
+class="math inline">\(\mathbb{R}^n\)</span>. Therefore, their
+composition <span class="math inline">\(\chi^{-1} \circ g \circ \psi
+\circ \psi^{-1} \circ f \circ \phi = \chi^{-1} \circ (g \circ f) \circ
+\phi\)</span> is also smooth. Hence, <span class="math inline">\(g \circ
+f\)</span> is differentiable, as claimed. ◻</p>
+</div>
+<h1 data-number="3" id="tangent-spaces"><span
+class="header-section-number">3</span> Tangent Spaces</h1>
+<p>The tangent space <span class="math inline">\(T_pM\)</span> at a
+point <span class="math inline">\(p \in M\)</span> is the set of all
+tangent vectors to <span class="math inline">\(M\)</span> at <span
+class="math inline">\(p\)</span>. We can identify <span
+class="math inline">\(T_pM\)</span> with the vector space <span
+class="math inline">\(\mathbb{R}^n\)</span> through a choice of
+coordinates. A smooth curve <span class="math inline">\(\gamma: I \to
+M\)</span> with <span class="math inline">\(\gamma(0) = p\)</span> is
+given by <span class="math inline">\(\gamma(t) = (x^1(t), x^2(t),
+\ldots, x^n(t))\)</span> in local coordinates, and its tangent vector at
+<span class="math inline">\(p\)</span> is given by <span
+class="math display">\[\gamma&#39;(0) = \left(\frac{dx^1}{dt}(0),
+\frac{dx^2}{dt}(0), \ldots, \frac{dx^n}{dt}(0)\right).\]</span></p>
+<h1 data-number="4" id="curves-and-surfaces"><span
+class="header-section-number">4</span> Curves and Surfaces</h1>
+<p>A <em>curve</em> in a smooth manifold <span
+class="math inline">\(M\)</span> is a smooth map <span
+class="math inline">\(\gamma: I \to M\)</span>, where <span
+class="math inline">\(I\)</span> is an interval in <span
+class="math inline">\(\mathbb{R}\)</span>. We say that a curve is
+<em>regular</em> if its velocity vector <span
+class="math inline">\(\gamma&#39;(t)\)</span> is nonzero for all <span
+class="math inline">\(t \in I\)</span>. The <em>velocity vector</em> of
+a regular curve <span class="math inline">\(\gamma\)</span> at <span
+class="math inline">\(p\)</span> is the tangent vector <span
+class="math inline">\(\gamma&#39;(0) \in T_pM\)</span>.</p>
+<div class="example">
+<p><strong>Example 4.1</strong> (Parametric Curves in <span
+class="math inline">\(\mathbb{R}^3\)</span>). Consider the parametric
+curve <span class="math inline">\(\gamma: \mathbb{R} \to
+\mathbb{R}^3\)</span> defined by <span class="math display">\[\gamma(t)
+= (t, t^2, \sin(t)).\]</span> The velocity vector of this curve is given
+by <span
+class="math display">\[\begin{equation}\label{eq:parametric_curve}
+\gamma&#39;(t) = (1, 2t, \cos(t)).\tag{4.1}\end{equation}\]</span> The
+tangent vector at <span class="math inline">\(t = 0\)</span> is <span
+class="math inline">\(\gamma&#39;(0) = (1, 0, 1)\)</span>. <span
+class="citation" data-cites="do-carmo"></span></p>
+</div>
+<div class="example">
+<p><strong>Example 4.2</strong> (Circle in <span
+class="math inline">\(\mathbb{R}^2\)</span>). Let <span
+class="math inline">\(S^1\)</span> be the unit circle in <span
+class="math inline">\(\mathbb{R}^2\)</span> defined by <span
+class="math display">\[S^1 = \{(x, y) \in \mathbb{R}^2 \mid x^2 + y^2 =
+1\}.\]</span> We can parametrize <span
+class="math inline">\(S^1\)</span> using the angle <span
+class="math inline">\(\theta\)</span> as <span
+class="math inline">\(\gamma(\theta) = (\cos(\theta),
+\sin(\theta))\)</span>. The velocity vector is given by <span
+class="math display">\[\begin{equation}\label{eq:circle}
+\gamma&#39;(\theta) = (-\sin(\theta),
+\cos(\theta)).\tag{4.2}\end{equation}\]</span> The tangent vector at
+<span class="math inline">\(\theta = 0\)</span> is <span
+class="math inline">\(\gamma&#39;(0) = (0, 1)\)</span>.</p>
+</div>
+<div class="example">
+<p><strong>Example 4.3</strong> (Helix in <span
+class="math inline">\(\mathbb{R}^3\)</span>). Let <span
+class="math inline">\(S^1\)</span> be the unit circle in <span
+class="math inline">\(\mathbb{R}^2\)</span> as before. We can form a
+helix in <span class="math inline">\(\mathbb{R}^3\)</span> by rotating
+<span class="math inline">\(S^1\)</span> along the <span
+class="math inline">\(z\)</span>-axis. Parametrize the helix using the
+angle <span class="math inline">\(\theta\)</span> as <span
+class="math display">\[\gamma(\theta) = (\cos(\theta), \sin(\theta),
+\theta).\]</span> The velocity vector is <span
+class="math display">\[\begin{equation}\label{eq:helix}
+\gamma&#39;(\theta) = (-\sin(\theta), \cos(\theta),
+1).\tag{4.3}\end{equation}\]</span> The tangent vector at <span
+class="math inline">\(\theta = 0\)</span> is <span
+class="math inline">\(\gamma&#39;(0) = (0, 1, 1)\)</span>.</p>
+</div>
+<div class="example">
+<p><strong>Example 4.4</strong> (Sphere in <span
+class="math inline">\(\mathbb{R}^3\)</span>). Consider the sphere <span
+class="math inline">\(S^2\)</span> of radius <span
+class="math inline">\(r\)</span> in <span
+class="math inline">\(\mathbb{R}^3\)</span> centered at the origin,
+given by <span class="math display">\[S^2 = \{(x, y, z) \in \mathbb{R}^3
+\mid x^2 + y^2 + z^2 = r^2\}.\]</span> To parametrize <span
+class="math inline">\(S^2\)</span>, we can use spherical coordinates:
+<span class="math display">\[\gamma(\theta, \phi) =
+(r\sin(\phi)\cos(\theta), r\sin(\phi)\sin(\theta),
+r\cos(\phi)),\]</span> where <span class="math inline">\(0 \leq \theta
+\leq 2\pi\)</span> and <span class="math inline">\(0 \leq \phi \leq
+\pi\)</span>. The velocity vectors are <span
+class="math display">\[\begin{align}
+\gamma_{\theta}&#39;(\theta, \phi) &amp;= (-r\sin(\phi)\sin(\theta),
+r\sin(\phi)\cos(\theta), 0), \label{eq:sphere_theta}\tag{4.4}\\
+\gamma_{\phi}&#39;(\theta, \phi) &amp;= (r\cos(\phi)\cos(\theta),
+r\cos(\phi)\sin(\theta), -r\sin(\phi)). \label{eq:sphere_phi}\tag{4.5}
+\end{align}\]</span> The tangent vectors at the North Pole <span
+class="math inline">\((\theta = 0, \phi = 0)\)</span> are <span
+class="math inline">\(\gamma_{\theta}&#39;(0, 0) = (0, r, 0)\)</span>
+and <span class="math inline">\(\gamma_{\phi}&#39;(0, 0) = (r, 0,
+0)\)</span>.</p>
+</div>
+<p>A <em>surface</em> in a smooth manifold <span
+class="math inline">\(M\)</span> is a subset <span
+class="math inline">\(S \subseteq M\)</span> such that for every point
+<span class="math inline">\(p \in S\)</span>, there exists a
+neighborhood <span class="math inline">\(U\)</span> of <span
+class="math inline">\(p\)</span> and a smooth map <span
+class="math inline">\(\phi: U \to \mathbb{R}^2\)</span> such that <span
+class="math inline">\(\phi(U \cap S) = \{(u, v) \in \mathbb{R}^2 \mid u
+\geq 0\}\)</span>.</p>
+<h1 data-number="5" id="first-fundamental-form"><span
+class="header-section-number">5</span> First Fundamental Form</h1>
+<p>The <em>first fundamental form</em> is a fundamental concept in the
+study of surfaces. It encodes the intrinsic geometry of a surface,
+capturing information about the lengths and angles of curves on the
+surface.</p>
+<div class="definition">
+<p><strong>Defintion 5.1</strong>. Let <span
+class="math inline">\(S\)</span> be a smooth surface in <span
+class="math inline">\(\mathbb{R}^3\)</span>, and let <span
+class="math inline">\(\mathbf{X}: U \subset \mathbb{R}^2 \to
+\mathbb{R}^3\)</span> be a smooth parametrization of <span
+class="math inline">\(S\)</span>. The first fundamental form is defined
+as <span class="math display">\[I = E\,du^2 + 2F\,du\,dv +
+G\,dv^2,\]</span> where <span class="math inline">\(E = \mathbf{X}_u
+\cdot \mathbf{X}_u\)</span>, <span class="math inline">\(F =
+\mathbf{X}_u \cdot \mathbf{X}_v\)</span>, and <span
+class="math inline">\(G = \mathbf{X}_v \cdot \mathbf{X}_v\)</span> are
+the coefficients of the first fundamental form, and <span
+class="math inline">\(du\)</span> and <span
+class="math inline">\(dv\)</span> are the differentials of the
+parameters <span class="math inline">\(u\)</span> and <span
+class="math inline">\(v\)</span>, respectively.</p>
+</div>
+<p>The coefficients <span class="math inline">\(E\)</span>, <span
+class="math inline">\(F\)</span>, and <span
+class="math inline">\(G\)</span> of the first fundamental form depend on
+the choice of parametrization of the surface. However, the invariants
+such as the Gaussian curvature and the total curvature remain invariant
+under isometries <span class="citation"
+data-cites="do-carmo"></span>.</p>
+<h2 data-number="5.1" id="calculations"><span
+class="header-section-number">5.1</span> Calculations</h2>
+<p>To illustrate the first fundamental form, let’s consider the
+parametric curve <span class="math display">\[\gamma(u, v) = (u, u^2,
+v).\]</span> The coefficients of the first fundamental form are
+calculated as follows:</p>
+<p><span class="math display">\[\begin{aligned}
+E &amp;= \mathbf{X}_u \cdot \mathbf{X}_u = (1, 2u, 0) \cdot (1, 2u, 0) =
+1 + 4u^2, \\
+F &amp;= \mathbf{X}_u \cdot \mathbf{X}_v = (1, 2u, 0) \cdot (0, 0, 1) =
+0, \\
+G &amp;= \mathbf{X}_v \cdot \mathbf{X}_v = (0, 0, 1) \cdot (0, 0, 1) =
+1.
+\end{aligned}\]</span></p>
+<p>Thus, the first fundamental form for this parametric curve is <span
+class="math display">\[I = (1 + 4u^2)\,du^2 + dv^2.\]</span></p>
+<h1 data-number="6" id="intrinsic-vs.-extrinsic-geometry"><span
+class="header-section-number">6</span> Intrinsic vs. Extrinsic
+Geometry</h1>
+<p>Intrinsic properties of geometric objects are those that are
+independent of the embedding in higher-dimensional spaces. For example,
+the length of a curve, the curvature of a surface, and geodesics are all
+intrinsic properties.</p>
+<p>Extrinsic properties, on the other hand, depend on the embedding. For
+instance, the normal vector and the second fundamental form of a surface
+in <span class="math inline">\(\mathbb{R}^3\)</span> are extrinsic
+properties.</p>
+<h1 data-number="7" id="theorema-egregium"><span
+class="header-section-number">7</span> Theorema Egregium</h1>
+<p>The <em>Theorema Egregium</em> (Remarkable Theorem) is a fundamental
+result in differential geometry, discovered by Carl Friedrich Gauss
+<span class="citation" data-cites="gauss"></span>. It establishes an
+intrinsic curvature property of surfaces and highlights the remarkable
+fact that Gaussian curvature is invariant under isometric mappings.</p>
+<div class="theorem">
+<p><strong>Theorem 7.1</strong> (Theorema Egregium). Let <span
+class="math inline">\(S\)</span> be a smooth surface in <span
+class="math inline">\(\mathbb{R}^3\)</span> with a smooth metric <span
+class="math inline">\(g\)</span>, and let <span
+class="math inline">\(\bar{S}\)</span> be another surface obtained by
+isometrically mapping <span class="math inline">\(S\)</span> onto
+itself. Then, the Gaussian curvature <span
+class="math inline">\(K\)</span> of <span
+class="math inline">\(S\)</span> is equal to the Gaussian curvature
+<span class="math inline">\(\bar{K}\)</span> of <span
+class="math inline">\(\bar{S}\)</span> at corresponding points.</p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Let <span class="math inline">\(\mathbf{X} = (x, y,
+z)\)</span> be a coordinate system in <span
+class="math inline">\(\mathbb{R}^3\)</span> and <span
+class="math inline">\((u, v)\)</span> be a coordinate system on <span
+class="math inline">\(S\)</span>. We assume that <span
+class="math inline">\(g\)</span> is the metric induced on <span
+class="math inline">\(S\)</span> by the Euclidean metric <span
+class="math inline">\(\mathbf{G} = d\mathbf{X} \cdot
+d\mathbf{X}\)</span>. Similarly, let <span
+class="math inline">\(\bar{\mathbf{X}} = (\bar{x}, \bar{y},
+\bar{z})\)</span> be another coordinate system in <span
+class="math inline">\(\mathbb{R}^3\)</span> and <span
+class="math inline">\((\bar{u}, \bar{v})\)</span> be a coordinate system
+on <span class="math inline">\(\bar{S}\)</span>, induced by the
+Euclidean metric <span class="math inline">\(\bar{\mathbf{G}} =
+d\bar{\mathbf{X}} \cdot d\bar{\mathbf{X}}\)</span>.</p>
+<p>Let <span class="math inline">\(\mathbf{E}, \mathbf{F},
+\mathbf{G}\)</span> be the coefficients of the first fundamental form
+for <span class="math inline">\(S\)</span>, and <span
+class="math inline">\(\bar{\mathbf{E}}, \bar{\mathbf{F}},
+\bar{\mathbf{G}}\)</span> be the coefficients of the first fundamental
+form for <span class="math inline">\(\bar{S}\)</span>.</p>
+<p>We can write the first fundamental form coefficients for <span
+class="math inline">\(S\)</span> in terms of the coordinate system <span
+class="math inline">\((u, v)\)</span> as follows: <span
+class="math display">\[\begin{aligned}
+\mathbf{E} &amp;= \mathbf{X}_u \cdot \mathbf{X}_u, \\
+\mathbf{F} &amp;= \mathbf{X}_u \cdot \mathbf{X}_v, \\
+\mathbf{G} &amp;= \mathbf{X}_v \cdot \mathbf{X}_v,
+\end{aligned}\]</span> where subscripts denote partial derivatives.</p>
+<p>Similarly, for <span class="math inline">\(\bar{S}\)</span>, the
+first fundamental form coefficients in the coordinate system <span
+class="math inline">\((\bar{u}, \bar{v})\)</span> are given by: <span
+class="math display">\[\begin{aligned}
+\bar{\mathbf{E}} &amp;= \bar{\mathbf{X}}_{\bar{u}} \cdot
+\bar{\mathbf{X}}_{\bar{u}}, \\
+\bar{\mathbf{F}} &amp;= \bar{\mathbf{X}}_{\bar{u}} \cdot
+\bar{\mathbf{X}}_{\bar{v}}, \\
+\bar{\mathbf{G}} &amp;= \bar{\mathbf{X}}_{\bar{v}} \cdot
+\bar{\mathbf{X}}_{\bar{v}}.
+\end{aligned}\]</span></p>
+<p>Since <span class="math inline">\(S\)</span> and <span
+class="math inline">\(\bar{S}\)</span> are isometric, the first
+fundamental forms are equal: <span class="math display">\[\begin{align}
+\mathbf{E} &amp;= \bar{\mathbf{E}}, \label{eq:egregium_1}\tag{7.1} \\
+\mathbf{F} &amp;= \bar{\mathbf{F}}, \label{eq:egregium_2}\tag{7.2} \\
+\mathbf{G} &amp;= \bar{\mathbf{G}}. \label{eq:egregium_3}\tag{7.3}
+\end{align}\]</span></p>
+<p>The Gaussian curvature <span class="math inline">\(K\)</span> of
+<span class="math inline">\(S\)</span> is given by the determinant of
+the second fundamental form divided by the determinant of the first
+fundamental form: <span
+class="math display">\[\begin{equation}\label{eq:egregium_K}
+K = \frac{\mathbf{EG} -
+\mathbf{F}^2}{\mathbf{EG}}.\tag{7.4}\end{equation}\]</span></p>
+<p>Similarly, the Gaussian curvature <span
+class="math inline">\(\bar{K}\)</span> of <span
+class="math inline">\(\bar{S}\)</span> is given by: <span
+class="math display">\[\begin{equation}\label{eq:egregium_K_bar}
+\bar{K} = \frac{\bar{\mathbf{E}}\bar{\mathbf{G}} -
+\bar{\mathbf{F}}^2}{\bar{\mathbf{E}}\bar{\mathbf{G}}}.\tag{7.5}\end{equation}\]</span></p>
+<p>Substituting Equations <a href="#eq:egregium_1"
+data-reference-type="eqref" data-reference="eq:egregium_1"><span
+class="math inline">\(\eqref{eq:egregium_1}\)</span></a>, <a
+href="#eq:egregium_2" data-reference-type="eqref"
+data-reference="eq:egregium_2"><span
+class="math inline">\(\eqref{eq:egregium_2}\)</span></a>, and <a
+href="#eq:egregium_3" data-reference-type="eqref"
+data-reference="eq:egregium_3"><span
+class="math inline">\(\eqref{eq:egregium_3}\)</span></a> into Equations
+<a href="#eq:egregium_K" data-reference-type="eqref"
+data-reference="eq:egregium_K"><span
+class="math inline">\(\eqref{eq:egregium_K}\)</span></a> and <a
+href="#eq:egregium_K_bar" data-reference-type="eqref"
+data-reference="eq:egregium_K_bar"><span
+class="math inline">\(\eqref{eq:egregium_K_bar}\)</span></a>, we obtain:
+<span class="math display">\[\begin{aligned}
+K &amp;= \frac{\bar{\mathbf{E}}\bar{\mathbf{G}} -
+\bar{\mathbf{F}}^2}{\bar{\mathbf{E}}\bar{\mathbf{G}}}, \\
+\bar{K} &amp;= \frac{\bar{\mathbf{E}}\bar{\mathbf{G}} -
+\bar{\mathbf{F}}^2}{\bar{\mathbf{E}}\bar{\mathbf{G}}}.
+\end{aligned}\]</span></p>
+<p>Since <span class="math inline">\(K\)</span> and <span
+class="math inline">\(\bar{K}\)</span> have the same expression, they
+are equal at corresponding points on <span
+class="math inline">\(S\)</span> and <span
+class="math inline">\(\bar{S}\)</span>. This concludes the proof. ◻</p>
+</div>
+<h1 data-number="8" id="applications"><span
+class="header-section-number">8</span> Applications</h1>
+<p>Differential geometry has applications in various fields, including
+physics, computer graphics, and robotics <span class="citation"
+data-cites="do-carmo pressley"></span>. We briefly discuss some of these
+applications, highlighting the wide range of areas where differential
+geometry plays a crucial role.</p>
+<h1 data-number="9" id="conclusion"><span
+class="header-section-number">9</span> Conclusion</h1>
+<p>Differential geometry is a fascinating and versatile branch of
+mathematics with applications in many scientific disciplines. This paper
+aimed to provide a gentle introduction to some of the fundamental
+concepts and results in differential geometry. We hope it encourages
+further exploration into this captivating subject.</p>
+</body>
+</html>
