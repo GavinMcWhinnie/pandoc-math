@@ -94,13 +94,14 @@ class AmsthmSettings:
     number_within: bool = False
     equation_counter : int
 
-    def __init__(self, doc: pf.Doc) -> None:
+    def __init__(self, doc: pf.Doc = None) -> None:
         self.theorems = {}
         self.section_counters = [0]*3
         self.theorem_counters = {}
         self.identifiers = {}
         self.equation_counter = 1
-        self.read_metadata(doc)
+        if doc:
+            self.read_metadata(doc)
 
         # Add the pre-defined proof environment to theorems
         proof : AmsTheorem = AmsTheorem("proof", "proof", "Proof", numbered=False)
