@@ -8,7 +8,7 @@ package-dir = {"" = "src"}
 
 [project]
 name = "pandoc-math"
-version = "0.1.0"
+version = "1.0.0"
 authors = [
   { name="Gavin McWhinnie", email="gmcwhinn@ed.ac.uk" },
 ]
