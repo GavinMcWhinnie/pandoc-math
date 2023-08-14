@@ -1,10 +1,10 @@
 # pandoc-math
-A pandoc filter for converting LaTeX to html for mathematics teaching. Provides support for the amsthm package and equation labelling.
+A pandoc filter for converting LaTeX to html for mathematics documents. Provides support for various environments & commands in the amsthm/amsmath packages and equation labelling & referencing.
 
 Installation
 ------------
 
-Requires Python > 3.7 which can be installed here: [Python download page](https://www.python.org/downloads/) and Pandoc which can be installed here: [Pandoc installation page](https://pandoc.org/installing.html).
+Requires Python > 3.7 which can be installed here: [Python download page](https://www.python.org/downloads/) and Pandoc > 2.11 which can be installed here: [Pandoc installation page](https://pandoc.org/installing.html).
 
 To download pandoc-math, use the pip tool with the command:
 
@@ -16,10 +16,9 @@ https://gavinmcwhinnie.github.io/pandoc-math
 
 Usage
 -----
-To convert `input.tex` to `output.html` using the pandoc-math filter, use the `--filter` argument. For example:
 
-    pandoc input.tex -o output.html -s --mathjax --filter pandoc-math
+The basic usage of pandoc-math is:
 
-Using custom metadata file to define custom amsthm shared/parent counters:
+    pandoc-math [file] [options]
 
-    pandoc input.tex -o output.html -s --mathjax --metadata-file metadata.yaml --filter pandoc-math
+Where  `[file]` is a `.TeX` file to be converted to html.

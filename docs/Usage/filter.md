@@ -11,6 +11,6 @@ pandoc main.tex -o output.html -s --mathjax --number-sections --filter pandoc-ma
 
 > NOTE: **Specifying metadata**
 >
-> To get support for amsthm environments, you will need to specify the theorem options
-> manually in a YAML file and pass this to the `--metadata-file` option. An example
-> of such a metadata file can be found [here](../examples/Example paper/metadata.yaml).
+> To get support for amsthm environments, you will need to specify the amsthm theoren names, styles,
+> and shared/parent counters options manually in a YAML file and pass this to the `--metadata-file`
+> option. An example of such a metadata file can be found [here](../examples/Example paper/metadata.yaml).
