@@ -10,6 +10,18 @@ from pathlib import Path
 # ams.py ? not sure how
 
 
+SAMPLE_METADATA = {
+'amsthm_settings': {
+    'definition':
+        [{'env_name': 'definition', 'text': 'Definition', 'parent_counter': 'section'},
+        {'env_name': 'theorem', 'shared_counter': 'definition', 'text': 'Theorem'},
+        {'env_name': 'example', 'shared_counter': 'definition', 'text': 'Example'}],
+    'plain':
+        [{'env_name': 'remarks', 'text': 'Remarks', 'parent_counter': 'section'},
+        {'env_name': 'ackn', 'shared_counter': 'remarks', 'text': 'Acknowledgements'}],
+    'number_within': True
+}}
+
 from pandocmath.latex_reader import read_metadata_from_file
 
 def test_pandoc():
@@ -20,17 +32,7 @@ def test_pandoc():
 
 def test_latex_reader_from_file():
 
-    expected = {
-    'amsthm_settings': {
-        'definition':
-            [{'env_name': 'definition', 'text': 'Definition', 'parent_counter': 'section'},
-            {'env_name': 'theorem', 'shared_counter': 'definition', 'text': 'Theorem'},
-            {'env_name': 'example', 'shared_counter': 'definition', 'text': 'Example'}],
-        'plain':
-            [{'env_name': 'remarks', 'text': 'Remarks', 'parent_counter': 'section'},
-            {'env_name': 'ackn', 'shared_counter': 'remarks', 'text': 'Acknowledgements'}],
-        'number_within': True
-    }}
+    expected = SAMPLE_METADATA
 
     relative_path = Path("files/latex_reader_test.tex")
     path : Path= Path(__file__).parent / relative_path
@@ -38,3 +40,26 @@ def test_latex_reader_from_file():
     actual = read_metadata_from_file(str(path.resolve()))
 
     assert expected == actual
+
+from pandocmath.ams import AmsthmSettings, AmsTheorem
+
+def test_read_metadata():
+
+
+    doc : pf.Doc = pf.Doc()
+    doc.metadata = SAMPLE_METADATA
+
+    amsthm_settings = AmsthmSettings(doc)
+    theorems = amsthm_settings.theorems
+
+    for name, theorem in amsthm_settings.theorems.items():
+        assert isinstance(theorem, AmsTheorem)
+
+    env_names = ['definition','theorem','example','remarks','ackn']
+    for env_name in env_names:
+        assert theorems[env_name].env_name == env_name
+
+    assert theorems['definition'].parent_counter == 'section'
+    assert theorems['ackn'].shared_counter == 'remarks'
+
+    assert amsthm_settings.number_within == True
