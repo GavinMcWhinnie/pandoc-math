@@ -8,7 +8,7 @@ Requires Python > 3.7 which can be installed here: [Python download page](https:
 
 To download pandoc-math, use the pip tool with the command:
 
-    pip install git+https://github.com/GavinMcWhinnie/pandoc-math
+    pip install pandoc-math
 
 Documentation:
 -------------
