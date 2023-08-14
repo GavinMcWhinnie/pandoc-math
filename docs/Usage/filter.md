@@ -1,12 +1,16 @@
-# As a filter
+# Pandoc --filter option
 
 pandoc-math can also be used just like any other pandoc filter.
 
+A typical command using pandoc-math with the filter option would look like:
 
-> NOTE: **Resources on YAML.**
-> YAML can sometimes be a bit tricky, particularly on indentation.
-> Here are some resources that other users found useful to better
-> understand YAML's peculiarities.
+``` linenums="1"
+pandoc main.tex -o output.html -s --mathjax --number-sections --filter pandoc-math --metadata-file metadata.yaml
+```
+
+
+> NOTE: **Specifying metadata**
 >
-> - [YAML idiosyncrasies](https://docs.saltproject.io/en/3000/topics/troubleshooting/yaml_idiosyncrasies.html)
-> - [YAML multiline](https://yaml-multiline.info/)
+> To get support for amsthm environments, you will need to specify the theorem options
+> manually in a YAML file and pass this to the `--metadata-file` option. An example
+> of such a metadata file can be found [here](../examples/Example paper/metadata.yaml).
