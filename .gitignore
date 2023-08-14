@@ -1,5 +1,5 @@
 src/pandoc_math.egg-info
-build
+build/
 src/pandocmath/__pycache__
 site/
 tests/.pytest_cache
